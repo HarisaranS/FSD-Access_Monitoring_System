@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart.js';
+import { getUser, clearSession } from '../api.js';
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { items } = useCart();
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const user = getUser();
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    clearSession();
     navigate('/login');
   };
 

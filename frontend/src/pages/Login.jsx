@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { login, setSession } from '../api.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -15,17 +15,16 @@ const Login = () => {
     setError('');
     
     try {
-      const res = await axios.post('http://localhost:4000/api/auth/login', { email, password });
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      const data = await login({ email, password });
+      setSession(data);
       
-      if (res.data.user.role === 'admin') {
+      if (data.user.role === 'admin') {
         navigate('/admin');
       } else {
         navigate('/shop');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Identity verification failed.');
+      setError(err.message || 'Identity verification failed.');
     } finally {
       setLoading(false);
     }
