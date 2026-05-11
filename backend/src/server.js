@@ -20,11 +20,15 @@ const PORT = process.env.PORT || 4000;
 
 // Security Middleware
 app.use(helmet());
-app.use(  cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
-    credentials: true
-  })
-);
+app.use(cors({
+  origin: [
+    "http://localhost:5173", 
+    "http://localhost:5174",
+    process.env.CLIENT_ORIGIN,
+    "https://fsd-zt.vercel.app"
+  ].filter(Boolean),
+  credentials: true
+}));
 app.use(express.json());
 app.use(morgan("dev"));
 
